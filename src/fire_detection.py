@@ -1,0 +1,25 @@
+import time
+from threading import Thread
+from hal import hal_temp_humidity_sensor as temp_humid_sensor
+from hal import hal_lcd as LCD
+from hal import hal_servo as servo
+from hal import hal_dc_motor as dc_motor
+from play_fire_tone import play_fire_alert_tone
+
+def fire_detection_thread(system_state):
+    lcd = LCD.lcd()
+    buzzer_thread_started = False
+
+    while True:
+        temp, _ = temp_humid_sensor.read_temp_humidity()
+        if temp > 50:
+            if not system_state['fire_detected']:
+                system_state['fire_detected'] = True
+                lcd.lcd_clear()
+                lcd.lcd_display_string("FIRE DETECTED!", 1)
+                dc_motor.set_motor_speed(100)
+                servo.set_servo_position(100)
+                if not buzzer_thread_started:
+                    Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
+                    buzzer_thread_started = True
+        time.sleep(2)
