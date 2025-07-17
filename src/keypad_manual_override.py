@@ -1,23 +1,30 @@
 import time
-import queue
 from hal import hal_lcd as LCD
 from hal import hal_buzzer as buzzer
-from hal import hal_dc_motor as dc_motor
 from hal import hal_servo as servo
+from hal import hal_dc_motor as dc_motor
+from lcd_display_controller import set_override_mode, set_awaiting_password
+import queue
 
 def keypad_manual_override_thread(system_state):
+    shared_keypad_queue = system_state['shared_keypad_queue']
     lcd = LCD.lcd()
     password = ''
-    q = system_state['shared_keypad_queue']
+    awaiting_password = False
+
     while True:
         try:
-            key = q.get_nowait()
+            key = shared_keypad_queue.get_nowait()
             if key == '*':
-                password = ''
-                lcd.lcd_display_string("Override Cancelled", 2)
-            elif key.isdigit():
+                if system_state['fire_detected']:
+                    awaiting_password = True
+                    set_awaiting_password()
+                    lcd.lcd_display_string("Enter Password:", 2)
+                    password = ''
+            elif key.isdigit() and awaiting_password:
                 password += key
                 lcd.lcd_display_string(f"Entered: {password}", 2)
+
                 if len(password) >= 4:
                     if password == "0735":
                         system_state['fire_detected'] = False
@@ -26,9 +33,13 @@ def keypad_manual_override_thread(system_state):
                         dc_motor.stop()
                         servo.set_servo_position(0)
                         lcd.lcd_display_string("Override Success", 1)
+                        lcd.lcd_display_string("", 2)
+                        set_override_mode()
                     else:
                         lcd.lcd_display_string("Wrong Passcode", 1)
                     password = ''
+                    awaiting_password = False
         except queue.Empty:
             pass
+
         time.sleep(0.2)
