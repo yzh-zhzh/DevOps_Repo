@@ -9,7 +9,7 @@ def water_adjustment_thread(system_state):
         pot_val = int((pot_val / 1023) * 100)
         if system_state['fire_detected'] and not system_state['system_override']:
             servo.set_servo_position(pot_val)
-            update_water_volume(f"Water Level: {pot_val}%")
+            update_water_volume(f"Water Lvl: {pot_val}%")
         time.sleep(1)
 
         

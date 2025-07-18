@@ -9,5 +9,5 @@ def moisture_sensor_sprinkler_confirmation_thread(system_state):
             if val > 60:
                 update_sprinkler_status("Water Released!")
             else:
-                update_sprinkler_status("Check Moisture Sensor!")
+                update_sprinkler_status("Check Sensor!")
         time.sleep(3)

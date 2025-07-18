@@ -50,7 +50,7 @@ def lcd_display_thread():
                     elif alternate == 2:
                         lcd.lcd_display_string("* to override!".ljust(16), 2)
                     alternate = (alternate + 1) % 3
-                time.sleep(5)
+                time.sleep(3)
             else:
                 lcd.lcd_display_string("Smart Fire Alert".ljust(16), 1)
                 lcd.lcd_display_string("System Ready!".ljust(16), 2)
