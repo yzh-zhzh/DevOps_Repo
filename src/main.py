@@ -37,6 +37,7 @@ system_state = {
 def key_pressed(key):
     shared_keypad_queue.put(key)
 
+
 def main():
     # Initialize all hardware components
     led.init()
@@ -49,8 +50,9 @@ def main():
     keypad.init(key_pressed)
 
     # Clear LCD once at startup (after LCD init)
-    lcd = LCD.lcd()
-    lcd.lcd_clear()
+    from lcd_display_controller import lcd, lcd_lock
+    with lcd_lock:
+        lcd.lcd_clear()
 
     # Wait briefly to ensure all hardware is initialized properly
     time.sleep(1)

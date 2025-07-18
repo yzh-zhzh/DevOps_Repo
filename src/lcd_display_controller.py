@@ -1,3 +1,4 @@
+
 import time
 from threading import Lock
 from hal import hal_lcd as LCD
@@ -9,6 +10,9 @@ entered_override_mode = False
 awaiting_password = False
 fire_detected = False
 lcd_lock = Lock()
+
+# Create a single shared LCD instance
+lcd = LCD.lcd()
 
 def update_sprinkler_status(message):
     global sprinkler_status_message
@@ -31,34 +35,31 @@ def set_fire_detected(status=True):
     fire_detected = status
 
 def lcd_display_thread():
-    lcd = LCD.lcd()
     alternate = 0
-
     while True:
         with lcd_lock:
             if fire_detected and not entered_override_mode:
-                lcd.lcd_display_string("FIRE DETECTED!", 1)
+                lcd.lcd_display_string("FIRE DETECTED!".ljust(16), 1)
                 if awaiting_password:
-                    lcd.lcd_display_string("Enter Password:", 2)
+                    lcd.lcd_display_string("Enter Password:".ljust(16), 2)
                 else:
                     if alternate == 0:
-                        lcd.lcd_display_string("Volume: " + water_volume_message, 2)
+                        lcd.lcd_display_string(water_volume_message.ljust(16), 2)
                     elif alternate == 1:
-                        lcd.lcd_display_string(sprinkler_status_message, 2)
+                        lcd.lcd_display_string(sprinkler_status_message.ljust(16), 2)
                     elif alternate == 2:
-                        lcd.lcd_display_string("* to override!", 2)
+                        lcd.lcd_display_string("* to override!".ljust(16), 2)
                     alternate = (alternate + 1) % 3
                 time.sleep(5)
             else:
-                lcd.lcd_display_string("Smart Fire Alert", 1)
-                time.sleep(0.1)
-                lcd.lcd_display_string("System Ready!", 2)
-                time.sleep(0.1)
+                lcd.lcd_display_string("Smart Fire Alert".ljust(16), 1)
+                lcd.lcd_display_string("System Ready!".ljust(16), 2)
+                time.sleep(1)
 
 def update_lcd_line1(message):
-    lcd = LCD.lcd()
-    lcd.lcd_display_string(message.ljust(16), 1)
+    with lcd_lock:
+        lcd.lcd_display_string(message.ljust(16), 1)
 
 def update_lcd_line2(message):
-    lcd = LCD.lcd()
-    lcd.lcd_display_string(message.ljust(16), 2)
+    with lcd_lock:
+        lcd.lcd_display_string(message.ljust(16), 2)

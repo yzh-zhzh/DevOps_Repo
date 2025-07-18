@@ -8,19 +8,15 @@ from play_fire_tone import play_fire_alert_tone
 
 def fire_detection_thread(system_state):
     buzzer_thread_started = False
-
     while True:
         temp, _ = temp_humid_sensor.read_temp_humidity()
-
-        if temp > 50:
+        if temp > 20:
             if not system_state['fire_detected']:
                 system_state['fire_detected'] = True
                 set_fire_detected(True)  # Inform LCD controller to update display
                 dc_motor.set_motor_speed(100)
                 servo.set_servo_position(100)
-
                 if not buzzer_thread_started:
                     Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
                     buzzer_thread_started = True
-
         time.sleep(2)
