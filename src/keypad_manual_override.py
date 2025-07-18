@@ -1,29 +1,37 @@
 import time
-from hal import hal_lcd as LCD
 from hal import hal_buzzer as buzzer
 from hal import hal_servo as servo
 from hal import hal_dc_motor as dc_motor
-from lcd_display_controller import set_override_mode, set_awaiting_password
+from lcd_display_controller import (
+    set_override_mode,
+    set_awaiting_password,
+    update_lcd_line1,
+    update_lcd_line2,
+    lcd_lock
+)
 import queue
 
 def keypad_manual_override_thread(system_state):
     shared_keypad_queue = system_state['shared_keypad_queue']
-    lcd = LCD.lcd()
     password = ''
     awaiting_password = False
 
     while True:
         try:
             key = shared_keypad_queue.get_nowait()
+
             if key == '*':
                 if system_state['fire_detected']:
                     awaiting_password = True
-                    set_awaiting_password()
-                    lcd.lcd_display_string("Enter Password:", 2)
+                    set_awaiting_password(True)
                     password = ''
-            elif key.isdigit() and awaiting_password:
+                    with lcd_lock:
+                        update_lcd_line2("Enter Password:")
+
+            elif str(key).isdigit() and awaiting_password:
                 password += key
-                lcd.lcd_display_string(f"Entered: {password}", 2)
+                with lcd_lock:
+                    update_lcd_line2(f"Entered: {password}")
 
                 if len(password) >= 4:
                     if password == "1234":
@@ -32,13 +40,18 @@ def keypad_manual_override_thread(system_state):
                         buzzer.turn_off()
                         dc_motor.stop()
                         servo.set_servo_position(0)
-                        lcd.lcd_display_string("Override Success", 1)
-                        lcd.lcd_display_string("", 2)
-                        set_override_mode()
+                        set_override_mode(True)
+                        with lcd_lock:
+                            update_lcd_line1("Override Success")
+                            update_lcd_line2("")
                     else:
-                        lcd.lcd_display_string("Wrong Passcode", 1)
+                        with lcd_lock:
+                            update_lcd_line1("Wrong Passcode")
+
                     password = ''
                     awaiting_password = False
+                    set_awaiting_password(False)
+
         except queue.Empty:
             pass
 
