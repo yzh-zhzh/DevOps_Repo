@@ -1,4 +1,3 @@
-# main.py
 import time
 from threading import Thread
 import queue
@@ -12,6 +11,15 @@ from hal import hal_moisture_sensor as moisture_sensor
 from hal import hal_servo as servo
 from hal import hal_temp_humidity_sensor as temp_humid_sensor
 from hal import hal_dc_motor as dc_motor
+
+from lcd_display_controller import (
+    lcd_display_thread,
+    update_sprinkler_status,  # Used by threads to update LCD line 2 status
+    update_water_volume,      # Used by water_adjustment thread to show volume
+    set_fire_detected,        # Used by fire_detection thread to set fire status
+    set_override_mode,        # Used by keypad thread to show override status
+    set_awaiting_password     # Used to prompt user for password input
+)
 
 from fire_detection import fire_detection_thread
 from keypad_manual_override import keypad_manual_override_thread
@@ -53,7 +61,8 @@ def main():
     Thread(target=keypad_manual_override_thread, args=(system_state,), daemon=True).start()
     Thread(target=water_adjustment_thread, args=(system_state,), daemon=True).start()
     Thread(target=moisture_sensor_sprinkler_confirmation_thread, args=(system_state,), daemon=True).start()
-    Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
+    # Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
+    Thread(target=lcd_display_thread, daemon=True).start()
 
     # Keep main thread alive
     while True:
