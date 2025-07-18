@@ -20,7 +20,6 @@ from lcd_display_controller import (
     set_override_mode,        # Used by keypad thread to show override status
     set_awaiting_password     # Used to prompt user for password input
 )
-
 from fire_detection import fire_detection_thread
 from keypad_manual_override import keypad_manual_override_thread
 from water_adjustment import water_adjustment_thread

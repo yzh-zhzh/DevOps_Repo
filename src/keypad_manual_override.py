@@ -26,7 +26,7 @@ def keypad_manual_override_thread(system_state):
                 lcd.lcd_display_string(f"Entered: {password}", 2)
 
                 if len(password) >= 4:
-                    if password == "0735":
+                    if password == "1234":
                         system_state['fire_detected'] = False
                         system_state['system_override'] = True
                         buzzer.turn_off()
