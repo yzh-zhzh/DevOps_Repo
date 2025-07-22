@@ -18,39 +18,40 @@ def keypad_manual_override_thread(system_state):
     while True:
         try:
             key = shared_keypad_queue.get_nowait()
+            print(f"[Keypad] Key pressed: {key}")
 
             if key == '*':
+                print(f"[Keypad] Override requested. fire_detected={system_state['fire_detected']}")
                 if system_state['fire_detected']:
                     password = ''
                     set_awaiting_password(True)
-                    update_lcd_line1("Enter Passcode:")
-                    update_lcd_line2("")
+                    print(f"[Keypad] Awaiting passcode. awaiting_password={lcd_display_controller.awaiting_password}")
 
             elif str(key).isdigit() and lcd_display_controller.awaiting_password:
-                if len(password) < 8:  # Limit passcode length for display
-                    password += key
-                update_lcd_line2(password)
+                if len(password) < 8:
+                    password += str(key)
+                lcd_display_controller.entered_passcode = password
+                print(f"[Keypad] Passcode entered: {password}")
 
             elif key == '#' and lcd_display_controller.awaiting_password:
+                print(f"[Keypad] Passcode confirm: {password}")
                 if password == "1234":
+                    print("[Keypad] Passcode correct. Shutting down system.")
                     system_state['fire_detected'] = False
                     system_state['system_override'] = True
-                    buzzer.turn_off()
-                    dc_motor.stop()
+                    # buzzer.turn_off()
+                    dc_motor.set_motor_speed(0)  # Ensure DC motor stops
                     servo.set_servo_position(0)
                     set_override_mode(True)
                     set_awaiting_password(False)
-                    # Show system ready message
-                    update_lcd_line1("Smart Fire System")
-                    update_lcd_line2("System Ready!")
-                    password = ''
+                    lcd_display_controller.entered_passcode = ''
+                    lcd_display_controller.override_success = True
                 else:
-                    # Show wrong passcode message for 2 seconds, then re-prompt
-                    update_lcd_line1("Wrong Passcode!")
-                    update_lcd_line2("Pls Try Again!")
+                    print("[Keypad] Passcode incorrect.")
+                    lcd_display_controller.passcode_error = True
                     time.sleep(2)
-                    update_lcd_line1("Enter Passcode:")
-                    update_lcd_line2(password)
+                    lcd_display_controller.passcode_error = False
+                    lcd_display_controller.entered_passcode = password
 
         except queue.Empty:
             pass

@@ -14,7 +14,8 @@ def fire_detection_thread(system_state):
             if not system_state['fire_detected']:
                 system_state['fire_detected'] = True
                 set_fire_detected(True)  # Inform LCD controller to update display
-                dc_motor.set_motor_speed(100)
+                if not system_state['system_override']:
+                    dc_motor.set_motor_speed(100)
                 servo.set_servo_position(100)
                 if not buzzer_thread_started:
                     Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
