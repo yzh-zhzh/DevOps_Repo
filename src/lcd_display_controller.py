@@ -49,7 +49,7 @@ def lcd_display_thread():
             line2 = "System Ready!"
 
             if override_success:
-                line1 = "Override Success!"
+                line1 = "Override Success"
                 line2 = "System Off!"
                 lcd.lcd_display_string(line1.ljust(16), 1)
                 lcd.lcd_display_string(line2.ljust(16), 2)
@@ -62,7 +62,7 @@ def lcd_display_thread():
                 if awaiting_password:
                     if passcode_error:
                         line1 = "Wrong Passcode!"
-                        line2 = "Pls Try Again!"
+                        line2 = "Try Again!"
                     else:
                         line1 = "Enter Passcode:"
                         line2 = entered_passcode
