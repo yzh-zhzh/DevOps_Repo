@@ -10,9 +10,9 @@ def read_data():
     return temperature, humidity
 
 def temperature_condition(current_temp) : 
-    if current_temp >= 60 : 
+    if current_temp >= 20 : 
         return "Fire Detected"
-    elif current_temp >= 40 : 
+    elif current_temp >= 10 : 
         return "Warning"
     else : 
         return "Normal"
