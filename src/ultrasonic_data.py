@@ -1,7 +1,7 @@
 from hal import hal_usonic as usonic 
+from time import sleep
 
 def read_data() : 
-    usonic.init() 
     result = usonic.get_distance() 
     return result 
     
@@ -12,9 +12,14 @@ def detect_presence(distance) :
         return  False # No presence detected
 
 def main() : 
+    usonic.init()
     while True : 
         distance = read_data()
-        return (detect_presence(distance))
+        if detect_presence(distance): 
+            print("Presence Detected")
+        else : 
+            print("No Presence Detected")
+        sleep(1)
 
 
 if __name__ == '__main__':
