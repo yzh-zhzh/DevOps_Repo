@@ -18,7 +18,7 @@ from lcd_display_controller import (
     set_override_mode,
     set_awaiting_password
 )
-from fire_detection import fire_detection_thread
+from temp_sensor import fire_detection_thread
 from keypad_manual_override import keypad_manual_override_thread
 from water_adjustment import water_adjustment_thread
 from sprinkler_confirmation import moisture_sensor_sprinkler_confirmation_thread
