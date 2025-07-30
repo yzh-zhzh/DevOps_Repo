@@ -20,7 +20,7 @@ def send_email_alert(location, recipient_email):
 
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login("dcpe2a01devops.grp5.notifsys@gmail.com", "Dev0ps2510_Group5!")
+    server.login("dcpe2a01devops.grp5.notifsys@gmail.com", "ypfy jmvo wiqp rkrs")
     server.send_message(msg)
     server.quit()
 

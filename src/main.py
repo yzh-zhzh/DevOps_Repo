@@ -19,6 +19,7 @@ from lcd_display_controller import (
     set_awaiting_password
 )
 from temp_sensor import fire_detection_thread
+from notify_alert import notify_fire_alert
 from keypad_manual_override import keypad_manual_override_thread
 from water_adjustment import water_adjustment_thread
 from sprinkler_confirmation import moisture_sensor_sprinkler_confirmation_thread
@@ -65,6 +66,7 @@ def main():
     Thread(target=moisture_sensor_sprinkler_confirmation_thread, args=(system_state,), daemon=True).start()
     Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
     Thread(target=lcd_display_thread, daemon=True).start()
+    Thread(target=notify_fire_alert, args=(system_state,), daemon=True).start()
 
     # Keep main thread alive forever
     while True:
