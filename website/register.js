@@ -40,6 +40,7 @@ submitButton.addEventListener("click", function (event) {
       // Signed in
       const user = userCredential.user;
       console.log("User registered successfully:", user);
+      window.location.href = "index.html"; // Redirect to login page after successful registration
       // You can redirect or show a success message here
     })
     .catch((error) => {
