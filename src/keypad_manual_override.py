@@ -39,7 +39,7 @@ def keypad_manual_override_thread(system_state):
                     print("[Keypad] Passcode correct. Shutting down system.")
                     system_state['fire_detected'] = False
                     system_state['system_override'] = True
-                    # buzzer.turn_off()
+                    buzzer.turn_off()
                     dc_motor.set_motor_speed(0)  # Ensure DC motor stops
                     servo.set_servo_position(0)
                     set_override_mode(True)
