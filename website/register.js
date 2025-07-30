@@ -16,3 +16,29 @@
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+
+
+  //inputs
+  const roomNumber = document.getElementById("Room Number").value;
+  const email = document.getElementById("Email").value; 
+  const password = document.getElementById("Password").value;
+
+    //submit button
+    const submitButton = document.getElementById("submit");
+    submitButton.addEventListener("click", function(event){
+
+        event.preventDefault(); // Prevent the default form submission
+    
+        // Validate inputs
+        if (roomNumber && email && password) {
+            // Here you can add code to handle the registration logic, e.g., sending data to a server or Firebase
+            console.log("Registration successful with:", {
+            roomNumber,
+            email,
+            password
+            });
+            alert("Registration successful!");
+        } else {
+            alert("Please fill in all fields.");
+        }
+    })
