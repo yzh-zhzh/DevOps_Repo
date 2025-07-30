@@ -1,6 +1,8 @@
 
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,20 +27,20 @@
 
     //submit button
     const submitButton = document.getElementById("submit");
-    submitButton.addEventListener("click", function(event){
-
-        event.preventDefault(); // Prevent the default form submission
-    
-        // Validate inputs
-        if (roomNumber && email && password) {
-            // Here you can add code to handle the registration logic, e.g., sending data to a server or Firebase
-            console.log("Registration successful with:", {
-            roomNumber,
-            email,
-            password
-            });
-            alert("Registration successful!");
-        } else {
-            alert("Please fill in all fields.");
-        }
+    submitButton.addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    createUserWithEmailAndPassword(getAuth(), email, password)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            console.log("User registered successfully:", user);
+            // You can redirect or show a success message here
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error("Error registering user:", errorCode, errorMessage);
+            alert("Error registering user: " + errorMessage);
+            // Handle errors here (e.g., show an error message to the user)
+        });
     })
