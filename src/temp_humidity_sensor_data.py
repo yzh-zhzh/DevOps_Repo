@@ -9,31 +9,12 @@ def read_data():
 
     return temperature, humidity
 
-def temperature_condition(current_temp) : 
-    if current_temp >= 20 : 
-        return "Fire Detected"
-    elif current_temp >= 10 : 
-        return "Warning"
-    else : 
-        return "Normal"
-
-def humidity_condition(current_humid): 
-    if current_humid < 20 : 
-        return "Low humidity"
-    else : 
-        return "Normal"
-
-def temp_humid_fire_condition(Temp,Humid):
-    if (Temp == "Fire Detected") or (Temp == "Warning" and Humid == "Low humidity"): 
-        return "FIRE"
-    else : 
-        return "NORMAL"
 def main() : 
      while True : 
+        sleep(3)
         temp, humid = read_data()
-        temp_condition = temperature_condition(temp)
-        humid_condition = humidity_condition(humid)
-        return(temp_humid_fire_condition(temp_condition,humid_condition))
+        return(temp, humid)
+
 
 if __name__ == '__main__':
     main()
