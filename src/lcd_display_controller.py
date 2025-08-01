@@ -63,9 +63,23 @@ def lcd_display_thread():
                     if passcode_error:
                         line1 = "Wrong Passcode!"
                         line2 = "Try Again!"
+                        lcd.lcd_display_string(line1.ljust(16), 1)
+                        lcd.lcd_display_string(line2.ljust(16), 2)
+                        time.sleep(2)
+                        # After error, show passcode prompt again
+                        line1 = "Enter Passcode:"
+                        line2 = entered_passcode
+                        lcd.lcd_display_string(line1.ljust(16), 1)
+                        lcd.lcd_display_string(line2.ljust(16), 2)
+                        time.sleep(1)
+                        continue
                     else:
                         line1 = "Enter Passcode:"
                         line2 = entered_passcode
+                        lcd.lcd_display_string(line1.ljust(16), 1)
+                        lcd.lcd_display_string(line2.ljust(16), 2)
+                        time.sleep(1)
+                        continue
                 else:
                     if alternate == 0:
                         line2 = water_volume_message
@@ -74,9 +88,10 @@ def lcd_display_thread():
                     elif alternate == 2:
                         line2 = "* to override!"
                     alternate = (alternate + 1) % 3
-                lcd.lcd_display_string(line1.ljust(16), 1)
-                lcd.lcd_display_string(line2.ljust(16), 2)
-                time.sleep(3)
+                    lcd.lcd_display_string(line1.ljust(16), 1)
+                    lcd.lcd_display_string(line2.ljust(16), 2)
+                    time.sleep(3)
+                    continue
             else:
                 lcd.lcd_display_string(line1.ljust(16), 1)
                 lcd.lcd_display_string(line2.ljust(16), 2)
