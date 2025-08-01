@@ -6,7 +6,7 @@ import Fire_detection
 from hal import hal_led as led
 from hal import hal_lcd as LCD
 from hal import hal_adc as adc
-# from hal import hal_buzzer as buzzer
+from hal import hal_buzzer as buzzer
 from hal import hal_keypad as keypad
 from hal import hal_moisture_sensor as moisture_sensor
 from hal import hal_servo as servo
@@ -20,13 +20,10 @@ from notify_alert import notify_fire_alert
 from keypad_manual_override import keypad_manual_override_thread
 from water_adjustment import water_adjustment_thread
 from sprinkler_confirmation import moisture_sensor_sprinkler_confirmation_thread
-<<<<<<< HEAD
 from play_fire_tone import play_fire_alert_tone
 from ultrasonic_data import ultrasonic_data_thread
 # from camera_module import camera_thread
-=======
-# from play_fire_tone import play_fire_alert_tone
->>>>>>> 85a68ed36ab09feecbd38de7e2db7949cc9b0059
+from play_fire_tone import play_fire_alert_tone
 
 shared_keypad_queue = queue.Queue()
 
@@ -42,7 +39,7 @@ def key_pressed(key):
 def initialize_hardware():
     led.init()
     adc.init()
-    # buzzer.init()
+    buzzer.init()
     moisture_sensor.init()
     dc_motor.init()
     servo.init()
@@ -61,7 +58,7 @@ def start_all_threads():
     Thread(target=keypad_manual_override_thread, args=(system_state,), daemon=True).start()
     Thread(target=water_adjustment_thread, args=(system_state,), daemon=True).start()
     Thread(target=moisture_sensor_sprinkler_confirmation_thread, args=(system_state,), daemon=True).start()
-    # Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
+    Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
     Thread(target=lcd_display_thread, daemon=True).start()
     Thread(target=notify_fire_alert, args=(system_state,), daemon=True).start()
     Thread(target=ultrasonic_data_thread, args=(system_state,), daemon=True).start()
