@@ -1,6 +1,7 @@
 from hal import hal_ir_sensor as ir_sensor
 from hal import hal_temp_humidity_sensor as temp_humid_sensor
 from hal import hal_adc as adc
+import time
 
 def initialise():
     ir_sensor.init()

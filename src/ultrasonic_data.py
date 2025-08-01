@@ -1,6 +1,7 @@
 from hal import hal_usonic as usonic 
 from time import sleep
-
+import time
+from threading import Thread
 def read_data() : 
     result = usonic.get_distance() 
     return result 

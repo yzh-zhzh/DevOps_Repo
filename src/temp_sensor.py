@@ -5,12 +5,13 @@ from hal import hal_servo as servo
 from hal import hal_dc_motor as dc_motor
 from lcd_display_controller import set_fire_detected
 from play_fire_tone import play_fire_alert_tone
-
+import Fire_detection
+from hal import hal_buzzer as buzzer
 def fire_detection_thread(system_state):
     buzzer_thread_started = False
     while True:
-        temp, _ = temp_humid_sensor.read_temp_humidity()
-        if temp > 20:
+    
+        if Fire_detection.fire_detected():
             if not system_state['fire_detected']:
                 system_state['fire_detected'] = True
                 set_fire_detected(True)  # Inform LCD controller to update display
