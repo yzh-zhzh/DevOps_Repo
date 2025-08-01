@@ -15,7 +15,7 @@ from hal import hal_dc_motor as dc_motor
 
 from lcd_display_controller import lcd_display_thread
 
-from Fire_detection import fire_detection_thread
+from temp_sensor import fire_detection_thread
 from notify_alert import notify_fire_alert
 from keypad_manual_override import keypad_manual_override_thread
 from water_adjustment import water_adjustment_thread
@@ -23,13 +23,14 @@ from sprinkler_confirmation import moisture_sensor_sprinkler_confirmation_thread
 from play_fire_tone import play_fire_alert_tone
 from ultrasonic_data import ultrasonic_data_thread
 # from camera_module import camera_thread
-from play_fire_tone import play_fire_alert_tone
+
 
 shared_keypad_queue = queue.Queue()
 
 system_state = {
     'fire_detected': False,
     'system_override': False,
+    'motor_locked': False, #added for integration with main program
     'shared_keypad_queue': shared_keypad_queue
 }
 
@@ -42,6 +43,7 @@ def initialize_hardware():
     buzzer.init()
     moisture_sensor.init()
     dc_motor.init()
+    dc_motor.set_motor_speed(0) 
     servo.init()
     temp_humid_sensor.init()
     keypad.init(key_pressed)

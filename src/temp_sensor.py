@@ -9,6 +9,7 @@ import Fire_detection
 from hal import hal_buzzer as buzzer
 def fire_detection_thread(system_state):
     buzzer_thread_started = False
+    dc_motor.set_motor_speed(0) 
     while True:
     
         if Fire_detection.fire_detected():
