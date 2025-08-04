@@ -7,8 +7,9 @@ def moisture_sensor_sprinkler_confirmation_thread(system_state):
     while True:
         if system_state['fire_detected'] and not system_state['system_override']:
             val = moisture_sensor.read_sensor()
-            print(f"[Moisture Sensor] Value: {val}")  # Debugging output
-            if val > 0:  # Lower threshold for detection
+            print(f"Moisture Sensor Value: {val}") 
+            if val > 0:
+                print(f"[Moisture Sensor] Value: {val}")  
                 update_sprinkler_status("Water Released!")
             else:
                 update_sprinkler_status("Check Sensor!")
