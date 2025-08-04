@@ -1,4 +1,4 @@
-#  Smart Fire Alert System – Sprint Report
+#  Smart Automate Fire Alert System 
 
 ## Team Members & Contributions
 
