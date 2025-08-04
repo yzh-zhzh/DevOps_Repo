@@ -5,16 +5,21 @@ from hal import hal_servo as servo
 from hal import hal_dc_motor as dc_motor
 from lcd_display_controller import set_fire_detected
 from play_fire_tone import play_fire_alert_tone
+import Fire_detection
+from hal import hal_buzzer as buzzer
+from lcd_display_controller import set_override_mode
 
 def fire_detection_thread(system_state):
     buzzer_thread_started = False
+    dc_motor.set_motor_speed(0) 
     while True:
-        temp, _ = temp_humid_sensor.read_temp_humidity()
-        if temp > 20:
+        if Fire_detection.fire_detected():
             if not system_state['fire_detected']:
                 system_state['fire_detected'] = True
-                set_fire_detected(True)  # Inform LCD controller to update display
-                if not system_state['system_override']:
+                system_state['motor_locked'] = False   
+                set_override_mode(False)               
+                set_fire_detected(True)
+                if not system_state.get('motor_locked', False):
                     dc_motor.set_motor_speed(100)
                 servo.set_servo_position(100)
                 if not buzzer_thread_started:
