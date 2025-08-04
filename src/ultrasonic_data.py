@@ -8,11 +8,11 @@ def read_data() :
     
 def detect_presence(distance) : 
     if distance < 100 : 
-        return True #Presence Detected
+        return True 
     else : 
-        return  False # No presence detected
+        return  False 
     
-#added for integration with main program
+
 def ultrasonic_data_thread(system_state):
     usonic.init()
     while True:
@@ -20,11 +20,9 @@ def ultrasonic_data_thread(system_state):
             distance = read_data()
             if detect_presence(distance):
                 print("[Ultrasonic] Presence detected during fire!")
-                # Could add logic to alert about people in danger
             else:
                 print("[Ultrasonic] No presence detected")
         time.sleep(1)
-#added for integration with main program
 
 def main() : 
     usonic.init()

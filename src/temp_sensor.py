@@ -16,8 +16,8 @@ def fire_detection_thread(system_state):
         if Fire_detection.fire_detected():
             if not system_state['fire_detected']:
                 system_state['fire_detected'] = True
-                system_state['motor_locked'] = False   # <-- UNLOCK actuators!
-                set_override_mode(False)               # <-- Reset LCD override mode
+                system_state['motor_locked'] = False   
+                set_override_mode(False)               
                 set_fire_detected(True)
                 if not system_state.get('motor_locked', False):
                     dc_motor.set_motor_speed(100)

@@ -1,6 +1,4 @@
-# Add override success state
 override_success = False
-# Add passcode display state
 entered_passcode = ''
 passcode_error = False
 
@@ -8,7 +6,7 @@ import time
 from threading import Lock
 from hal import hal_lcd as LCD
 
-# Shared variables to be updated externally
+
 sprinkler_status_message = "Water OK"
 water_volume_message = "Vol: 0%"
 entered_override_mode = False
@@ -16,7 +14,7 @@ awaiting_password = False
 fire_detected = False
 lcd_lock = Lock()
 
-# Create a single shared LCD instance
+
 lcd = LCD.lcd()
 
 def update_sprinkler_status(message):
@@ -44,7 +42,6 @@ def lcd_display_thread():
     alternate = 0
     while True:
         with lcd_lock:
-            # Default LCD lines
             line1 = "Smart Fire Alert"
             line2 = "System Ready!"
 
@@ -66,7 +63,6 @@ def lcd_display_thread():
                         lcd.lcd_display_string(line1.ljust(16), 1)
                         lcd.lcd_display_string(line2.ljust(16), 2)
                         time.sleep(2)
-                        # After error, show passcode prompt again
                         line1 = "Enter Passcode:"
                         line2 = entered_passcode
                         lcd.lcd_display_string(line1.ljust(16), 1)

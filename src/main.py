@@ -30,7 +30,7 @@ shared_keypad_queue = queue.Queue()
 system_state = {
     'fire_detected': False,
     'system_override': False,
-    'motor_locked': False, #added for integration with main program
+    'motor_locked': False, 
     'shared_keypad_queue': shared_keypad_queue
 }
 
@@ -48,7 +48,6 @@ def initialize_hardware():
     temp_humid_sensor.init()
     keypad.init(key_pressed)
     Fire_detection.initialise()
-    # LCD clear
     from lcd_display_controller import lcd, lcd_lock
     with lcd_lock:
         lcd.lcd_clear()
@@ -79,7 +78,7 @@ def main():
 
     print("All sensors and systems are now running in the background.")
 
-    # Main thread just keeps the program alive
+    
     while True:
         time.sleep(1)
 
