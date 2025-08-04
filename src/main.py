@@ -22,7 +22,7 @@ from water_adjustment import water_adjustment_thread
 from sprinkler_confirmation import moisture_sensor_sprinkler_confirmation_thread
 from play_fire_tone import play_fire_alert_tone
 from ultrasonic_data import ultrasonic_data_thread
-# from camera_module import camera_thread
+from Camera import camera_thread
 
 
 shared_keypad_queue = queue.Queue()
@@ -64,7 +64,7 @@ def start_all_threads():
     Thread(target=lcd_display_thread, daemon=True).start()
     Thread(target=notify_fire_alert, args=(system_state,), daemon=True).start()
     Thread(target=ultrasonic_data_thread, args=(system_state,), daemon=True).start()
-    # Thread(target=camera_thread, args=(system_state,), daemon=True).start()
+    Thread(target=camera_thread, args=(system_state,), daemon=True).start()
 
 def main():
     print("Waiting for RFID card to activate system...")
