@@ -1,7 +1,7 @@
 import time
-# from hal import hal_buzzer as buzzer
 from hal import hal_servo as servo
 from hal import hal_dc_motor as dc_motor
+from hal import hal_led as led
 from lcd_display_controller import (
     set_override_mode,
     set_awaiting_password,
@@ -38,11 +38,10 @@ def keypad_manual_override_thread(system_state):
                 if password == "1234":
                     print("[Keypad] Passcode correct. Shutting down system.")
                     system_state['fire_detected'] = False
-                    system_state['system_override'] = True
-                    system_state['motor_locked'] = True  # Prevent further DC motor control
-                    # buzzer.turn_off()
-                    dc_motor.set_motor_speed(0)  # Ensure DC motor stops
+                    system_state['motor_locked'] = True  
+                    dc_motor.set_motor_speed(0)  
                     servo.set_servo_position(0)
+                    led.set_output(0, 0)
                     set_override_mode(True)
                     set_awaiting_password(False)
                     lcd_display_controller.entered_passcode = ''
