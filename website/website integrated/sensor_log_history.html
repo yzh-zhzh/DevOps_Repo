@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sensor History</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .card-wrapper {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1 1 45%;
+      min-width: 300px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    canvas {
+      width: 100% !important;
+      height: 400px !important;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul class="nav">
+        <li><a class="active" href="#">SENSOR HISTORY LOG</a></li>
+        <li><a href="/">DASHBOARD</a></li>
+        <li><a href="#">NOTIFICATION</a></li>
+        <li><a href="Profile.html" class="profile">PROFILE</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1>Sensor History Log</h1>
+    <p class="subtitle">Temperature and Humidity records over time</p>
+
+    <div class="card-wrapper">
+      <div class="card">
+        <h3>Temperature (°C)</h3>
+        <canvas id="tempChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>Humidity (%)</h3>
+        <canvas id="humidityChart"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function fetchSensorHistory() {
+      const response = await fetch('/sensor-history-data');
+      const data = await response.json();
+
+      const labels = data.map(entry => entry.timestamp);
+      const temps = data.map(entry => entry.temperature);
+      const humidities = data.map(entry => entry.humidity);
+
+      const tempCtx = document.getElementById('tempChart').getContext('2d');
+      const humidityCtx = document.getElementById('humidityChart').getContext('2d');
+
+      new Chart(tempCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Temperature (°C)',
+            data: temps,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            fill: true,
+            tension: 0.1,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              display: true,
+              title: { display: true, text: 'Timestamp' },
+              ticks: { maxRotation: 45, minRotation: 45, maxTicksLimit: 15 }
+            },
+            y: {
+              display: true,
+              title: { display: true, text: 'Temperature (°C)' },
+              suggestedMin: 0,
+              suggestedMax: 50
+            }
+          }
+        }
+      });
+
+      new Chart(humidityCtx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Humidity (%)',
+            data: humidities,
+            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            fill: true,
+            tension: 0.1,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              display: true,
+              title: { display: true, text: 'Timestamp' },
+              ticks: { maxRotation: 45, minRotation: 45, maxTicksLimit: 15 }
+            },
+            y: {
+              display: true,
+              title: { display: true, text: 'Humidity (%)' },
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+    }
+
+    fetchSensorHistory();
+  </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
-from hal import hal_temp_humidity_sensor as temp_humidity
+
 from time import sleep
+from src.hal import hal_temp_humidity_sensor as temp_humidity
 
 def read_data(): 
     temp_humidity.init() 

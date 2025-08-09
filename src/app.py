@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, render_template, Response
 import temp_humidity_sensor_data as temp_humidity
 from picamera2 import Picamera2
@@ -48,7 +49,6 @@ def video_feed():
 @app.route('/data')
 def data():
     temperature, humidity = temp_humidity.read_data()
-    return jsonify({
         "temperature": round(temperature, 2),
         "humidity": round(humidity, 2),
         "smoke": 25  # You can update this with real smoke data
