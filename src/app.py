@@ -1,87 +1,58 @@
-from flask import Flask, jsonify, render_template
-import mysql.connector
+
+from flask import Flask, jsonify, render_template, Response
 import temp_humidity_sensor_data as temp_humidity
- 
+from picamera2 import Picamera2
+from libcamera import Transform
+import cv2
+import numpy as np
+import time
 
 app = Flask(__name__)
 
-db_config = {
-    'host': 'localhost',     # or your DB server IP
-    'user': 'sensor_user',
-    'password': 'YourStrongPassword',
-    'database': 'sensor_data'
-}
+picam2 = Picamera2()
+picam2.configure(picam2.create_video_configuration(main={"size": (640, 480)}, transform=Transform(hflip=1)))
+picam2.start()
+
+def generate_frames():
+    while True:
+        frame = picam2.capture_array()
+        ret, buffer = cv2.imencode('.jpg', frame)
+        if not ret:
+            continue
+        frame_bytes = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+        time.sleep(0.1)  # Adjust frame rate as needed
 
 @app.after_request
 def add_cors_headers(response):
-    # Allow any domain to access the API
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
 @app.route('/')
 def dashboard():
-    # Serve the dashboard HTML page
     return render_template('Dashboard.html')
 
 @app.route('/profile')
 def profile():
-    # Serve the profile HTML page
     return render_template('profile.html')
 
-@app.route('/sensor-history')
-def sensor_history():
-    return render_template('sensor_history.html')
+@app.route('/camera')
+def camera_page():
+    return render_template('camera.html')
 
 
-def insert_sensor_data(temp, humidity):
-    conn = None
-    cursor = None
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        sql = "INSERT INTO temperature_log (temperature, humidity) VALUES (%s, %s)"
-        cursor.execute(sql, (temp, humidity))
-        conn.commit()
-    except mysql.connector.Error as e:
-        print("Error inserting data:", e)
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-            
-@app.route('/sensor-history-data')
-def sensor_history_data():
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        cursor.execute("SELECT recorded_at, temperature, humidity FROM temperature_log ORDER BY recorded_at ASC")
-        rows = cursor.fetchall()
-        cursor.close()
-        conn.close()
-
-        data = [
-            {
-                "timestamp": row[0].strftime("%Y-%m-%d %H:%M:%S"),
-                "temperature": row[1],
-                "humidity": row[2]
-            }
-            for row in rows
-        ]
-        return jsonify(data)
-    except mysql.connector.Error as e:
-        return jsonify({"error": str(e)}), 500
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/data')
 def data():
-    # Read sensor data and return JSON
     temperature, humidity = temp_humidity.read_data()
-    insert_sensor_data(temperature, humidity)
-    data = {
         "temperature": round(temperature, 2),
-        "humidity": round(humidity, 2)
-    }
-    return jsonify(data)
+        "humidity": round(humidity, 2),
+        "smoke": 25  # You can update this with real smoke data
+    })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
