@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CCTV Camera | Fire Alarm System</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
 </head>
 <body>
   <header>
-    <nav>
+   <nav>
       <ul class="nav">
-        <li><a class="active" href="camera.html">CCTV CAMERA</a></li>
-        <li><a href="Dashboard.html">SENSOR HISTORY LOG</a></li>
-        <li><a href="#">NOTIFICATION</a></li>
-        <li><a href="profile.html" class="profile">PROFILE</a></li>
+        <li><a href="/camera"  class="active">CCTV CAMERA</a></li>
+        <li><a href="/sensor_log_history">SENSOR HISTORY LOG</a></li>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/profile" >PROFILE</a></li>
       </ul>
-    </nav>
+   </nav>
   </header>
 
   <main class="content">
