@@ -5,20 +5,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Resident Profile | Fire Alarm System</title>
-  <link rel="stylesheet" href="dashboard.css" />
-  <script type="module" src="profile.js" defer></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+  <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
 </head>
 
 <body>
   <header>
-    <nav>
+   <nav>
       <ul class="nav">
-        <li><a href="camera.html">CCTV CAMERA</a></li>
-        <li><a href="Dashboard.html">SENSOR HISTORY LOG</a></li>
-        <li><a href="#">NOTIFICATION</a></li>
-        <li><a href="profile.html" class="active profile">PROFILE</a></li>
-      </ul>
-    </nav>
+        <li><a href="/camera">CCTV CAMERA</a></li>
+        <li><a href="/sensor_log_history">SENSOR HISTORY LOG</a></li>
+        <li><a href="/">Dashboard</a></li>
+      <li><a href="/profile" class="active">PROFILE</a></li>
+    </ul>
+   </nav>
+
   </header>
 
   <main class="content">

@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SENSOR HISTORY LOG | Fire Alarm System</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
 </head>
 <body>
   <header>
     <nav>
       <ul class="nav">
-        <li><a href="camera.html">CCTV CAMERA</a></li>
-        <li><a class="active" href="Dashboard.html">SENSOR HISTORY LOG</a></li>
-        <li><a href="#">NOTIFICATION</a></li>
-        <li><a href="profile.html" class="profile">PROFILE</a></li>
-      </ul>
-    </nav>
+        <li><a href="/camera">CCTV CAMERA</a></li>
+        <li><a href="/sensor_log_history">SENSOR HISTORY LOG</a></li>
+        <li><a href="/" class="active">Dashboard</a></li>
+      <li><a href="/profile" >PROFILE</a></li>
+    </ul>
+   </nav>
   </header>
 
   <main class="content">
@@ -54,7 +54,7 @@
     }
 
     fetchData();
-    setInterval(fetchData, 3000); // Update every 3 seconds
+    setInterval(fetchData, 3000); 
   </script>
 </body>
 </html>

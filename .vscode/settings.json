@@ -1,0 +1,5 @@
+{
+    "dataworkspace.excludedProjects": [
+        "RPI_db/RPI_db.sqlproj"
+    ]
+}

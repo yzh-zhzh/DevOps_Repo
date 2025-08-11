@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sensor History Logs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+  <!-- Chart.js and date adapter -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@latest"></script>
+  <style>
+    .content {
+      padding: 2rem 2rem;
+    }
+    .chart-row {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .chart-card {
+      flex: 1 1 45%;
+      min-width: 300px;
+      height: 400px;
+      padding: 15px;
+      box-sizing: border-box;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-card h3 {
+      margin: 0 0 10px 0;
+      font-weight: 600;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+    .chart-canvas {
+      flex-grow: 1;
+      width: 100% !important;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul class="nav">
+        <li><a href="/camera">CCTV CAMERA</a></li>
+        <li><a href="/sensor_log_history" class="active">SENSOR HISTORY LOG</a></li>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/profile">PROFILE</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1>Sensor History Logs</h1>
+    <p class="subtitle">Temperature and Humidity records over time.<br>
+      <span style="font-size: 0.9em; color: #d00;">Red dots mark outliers (possible sensor spikes such as 100 or -100).</span>
+    </p>
+
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>Temperature (°C)</h3>
+        <canvas id="tempChart" class="chart-canvas"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Humidity (%)</h3>
+        <canvas id="humidityChart" class="chart-canvas"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const MAX_POINTS = 100;
+
+    // Helper: Flag outliers outside range
+    function detectOutliers(values, min, max) {
+      return values.map(v => {
+        if (v <= min || v >= max) {
+          return { value: v, outlier: true };
+        }
+        return { value: v, outlier: false };
+      });
+    }
+
+    // Chart.js config for two datasets: one for normal, one for outliers
+    const tempCtx = document.getElementById('tempChart').getContext('2d');
+    const humidityCtx = document.getElementById('humidityChart').getContext('2d');
+
+    const tempChart = new Chart(tempCtx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Temperature (°C)',
+            data: [],
+            borderColor: 'rgb(255,99,132)',
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            fill: true,
+            tension: 0.1,
+            pointRadius: 3
+          },
+          {
+            label: 'Outliers',
+            data: [],
+            borderColor: 'red',
+            backgroundColor: 'red',
+            fill: false,
+            showLine: false,
+            pointRadius: 5,
+            pointStyle: 'circle'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              parser: 'yyyy-MM-dd HH:mm:ss',
+              tooltipFormat: 'PPpp',
+              displayFormats: { second: 'HH:mm:ss', minute: 'HH:mm' }
+            },
+            title: { display: true, text: 'Time' }
+          },
+          y: {
+            title: { display: true, text: 'Temperature (°C)' },
+            suggestedMin: 0,
+            suggestedMax: 50
+          }
+        }
+      }
+    });
+
+    const humidityChart = new Chart(humidityCtx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Humidity (%)',
+            data: [],
+            borderColor: 'rgb(54,162,235)',
+            backgroundColor: 'rgba(54,162,235,0.2)',
+            fill: true,
+            tension: 0.1,
+            pointRadius: 3
+          },
+          {
+            label: 'Outliers',
+            data: [],
+            borderColor: 'red',
+            backgroundColor: 'red',
+            fill: false,
+            showLine: false,
+            pointRadius: 5,
+            pointStyle: 'circle'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              parser: 'yyyy-MM-dd HH:mm:ss',
+              tooltipFormat: 'PPpp',
+              displayFormats: { second: 'HH:mm:ss', minute: 'HH:mm' }
+            },
+            title: { display: true, text: 'Time' }
+          },
+          y: {
+            title: { display: true, text: 'Humidity (%)' },
+            suggestedMin: 0,
+            suggestedMax: 100
+          }
+        }
+      }
+    });
+
+    async function fetchSensorHistory() {
+      try {
+        const res = await fetch('/sensor-history-data');
+        const data = await res.json();
+        if (!Array.isArray(data)) return;
+
+        const limited = data.slice(-MAX_POINTS);
+        const labels = limited.map(p => p.timestamp);
+
+        // Detect outliers for each sensor
+        // Adjust min/max as needed for your physical sensor's expected range
+        const tempReadings = detectOutliers(limited.map(p => p.temperature), -30, 60);
+        const humReadings  = detectOutliers(limited.map(p => p.humidity), -10, 110);
+
+        // Split normal & outlier readings per Chart.js docs
+        const tempNormals = tempReadings.map(r => r.outlier ? null : r.value);
+        const tempOutliers = tempReadings.map(r => r.outlier ? r.value : null);
+
+        const humNormals = humReadings.map(r => r.outlier ? null : r.value);
+        const humOutliers = humReadings.map(r => r.outlier ? r.value : null);
+
+        tempChart.data.labels = labels;
+        tempChart.data.datasets[0].data = tempNormals;
+        tempChart.data.datasets[1].data = tempOutliers;
+        tempChart.update();
+
+        humidityChart.data.labels = labels;
+        humidityChart.data.datasets[0].data = humNormals;
+        humidityChart.data.datasets[1].data = humOutliers;
+        humidityChart.update();
+      } catch (err) {
+        console.error('Fetch error:', err);
+      }
+    }
+
+    fetchSensorHistory();
+    setInterval(fetchSensorHistory, 3000); // update every 3 seconds
+  </script>
+</body>
+</html>
