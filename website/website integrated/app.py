@@ -65,8 +65,7 @@ def data():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-'''
+
 @app.route('/camera')
 def camera_page():
     return render_template('camera.html')
@@ -75,7 +74,6 @@ def camera_page():
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-'''
 
 
 if __name__ == '__main__':
