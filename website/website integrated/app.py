@@ -35,6 +35,10 @@ def add_cors_headers(response):
 
 @app.route('/')
 def dashboard():
+    return render_template('index.html')
+
+@app.route('/dashboard')
+def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/profile')
