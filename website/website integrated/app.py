@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, Response
 import temp_humidity_sensor_data as temp_humidity
 import time
 from threading import Thread
