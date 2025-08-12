@@ -338,6 +338,13 @@ This project is licensed under the MIT License - see the LICENSE file for detail
   - Fetch real-time sensor data from Raspberry Pi
   - Serve data to frontend via Flask
   - Auto-refresh every **3 seconds** for live updates
+- Reconfiguration of new database at Firebase 
+  - Create new database for storing user's informations
+- Re-developed JSON-based communication to faciliate the data exchange 
+  - Between Frontend pages
+  - Between Backend  and Raspberry Pi board for seamless integration
+- Full integration of website
+  - Managed the overall system integration, ensuring the website functions reliably with the Raspberry Pi sensors and supports real-time monitoring.
 
 #### Sensor Data Handling (Python Scripts)
 - `temp_humidity_sensor.py`:  
