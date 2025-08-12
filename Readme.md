@@ -282,19 +282,19 @@ This project is licensed under the MIT License - see the LICENSE file for detail
   - Created software architecture diagram (v1).
 
 ---
-### **Meenakshi Ramasubramanian**
+### 🔹 **Meenakshi Ramasubramanian**
 
-#### Software Requirements Specification (SRS)
+#### 📄 Software Requirements Specification (SRS)
 - Designed the **System Architecture Diagram** to visualize interactions between hardware, backend, and frontend components.
 - Created **Use Case Diagrams** to define system functionalities and user interactions.
 - Defined **Functional and Non-functional Requirements** to guide development and ensure system performance and reliability.
 
-#### Sprint Planning & Management
+#### 🚀 Sprint Planning & Management
 - Served as **Sprint Manager**, responsible for coordinating stand-ups, tracking sprint progress, and ensuring timely task completion.
 - Actively participated in **Sprint Planning**, including task breakdown, priority setting, and timeline estimation.
 - Facilitated effective collaboration and integration of hardware and software tasks across team members.
 
-#### Website Development (Frontend & Backend)
+#### 💻 Website Development (Frontend & Backend)
 - **Frontend:**
   - Built interactive web pages using **HTML**, **CSS**, and **JavaScript**.
   - Designed and implemented the UI for user registration, login, live camera feed, and fire alert dashboard.
@@ -305,7 +305,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
   - Integrated **Firebase Authentication** for secure user login and registration.
   - Created and maintained a **Firebase Realtime Database** to store user credentials and fire detection logs.
 
-#### Hardware Integration
+#### 🔌 Hardware Integration
 - Developed the **camera functionality** using **Raspberry Pi** and **Picamera2**.
   - Configured the system to capture **live CCTV footage** when a fire or gas alert is triggered.
   - Integrated the live video stream into the website for real-time monitoring.
@@ -338,6 +338,13 @@ This project is licensed under the MIT License - see the LICENSE file for detail
   - Fetch real-time sensor data from Raspberry Pi
   - Serve data to frontend via Flask
   - Auto-refresh every **3 seconds** for live updates
+- Reconfiguration of new database at Firebase 
+  - Create new database for storing user's informations
+- Re-developed JSON-based communication to faciliate the data exchange 
+  - Between Frontend pages
+  - Between Backend  and Raspberry Pi board for seamless integration
+- Full integration of website
+  - Managed the overall system integration, ensuring the website functions reliably with the Raspberry Pi sensors and supports real-time monitoring.
 
 #### Sensor Data Handling (Python Scripts)
 - `temp_humidity_sensor.py`:  
