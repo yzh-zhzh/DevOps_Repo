@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fire Alarm Dashboard</title>
+  <title>SENSOR HISTORY LOG | Fire Alarm System</title>
   <link rel="stylesheet" href="dashboard.css" />
 </head>
 <body>
   <header>
     <nav>
       <ul class="nav">
-        <li><a href="#">SENSOR HISTORY LOG</a></li>
-        <li><a class="active" href="#">DASHBOARD</a></li>
+        <li><a href="#">CCTV CAMERA</a></li>
+        <li><a class="active" href="#">SENSOR HISTORY LOG</a></li>
         <li><a href="#">NOTIFICATION</a></li>
-        <li><a href="Profile.html" class="profile">PROFILE</a></li>
+        <li><a href="profile.html" class="profile">PROFILE</a></li>
       </ul>
     </nav>
   </header>
@@ -45,6 +45,7 @@
         .then(data => {
           document.getElementById('temp-value').textContent = data.temperature + ' °C';
           document.getElementById('humidity-value').textContent = data.humidity + ' %';
+          document.getElementById('smoke-value').textContent = data.smoke + ' %';
           document.getElementById('timestamp').textContent = new Date().toLocaleString();
         })
         .catch(error => {
@@ -52,8 +53,8 @@
         });
     }
 
-    fetchData(); // initial call
-    setInterval(fetchData, 3000); // every 3 seconds
+    fetchData();
+    setInterval(fetchData, 3000); // Update every 3 seconds
   </script>
 </body>
 </html>

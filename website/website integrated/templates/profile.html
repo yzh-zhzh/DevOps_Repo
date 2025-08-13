@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Resident Profile | Fire Alarm System</title>
-  <link rel="stylesheet" href="dashboard.css" />
-  <script type="module" src="profile.js" defer></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+  <script type="module" src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
 </head>
+
 <body>
   <header>
-    <nav>
+   <nav>
       <ul class="nav">
-        <li><a href="#">SENSOR HISTORY LOG</a></li>
-        <li><a href="Dashboard.html">DASHBOARD</a></li>
-        <li><a href="#">NOTIFICATION</a></li>
-        <li><a href="#" class="active profile">PROFILE</a></li>
-      </ul>
-    </nav>
+        <li><a href="/camera">CCTV CAMERA</a></li>
+        <li><a href="/sensor_log_history">SENSOR HISTORY LOG</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+      <li><a href="/profile" class="active">PROFILE</a></li>
+    </ul>
+   </nav>
+
   </header>
 
   <main class="content">
     <h1>Resident Profile</h1>
     <p class="subtitle">Details for monitoring and emergency contact</p>
+
+    <!-- ✅ EDIT PROFILE BUTTON -->
+    <button class="edit-profile-btn" onclick="window.location.href='complete-profile.html'">✏️ Edit Profile</button>
 
     <div class="card-wrapper">
       <div class="card">
@@ -43,4 +50,5 @@
     </div>
   </main>
 </body>
+
 </html>
