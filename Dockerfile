@@ -1,28 +1,20 @@
-# --- Stage 1: Python backend ---
-FROM python:3.11-slim AS backend
+FROM python:3.10-slim
 
-# Set workdir
+# Set work directory
 WORKDIR /app
 
-# Copy Python backend
-COPY src/ /app/
+# Install build dependencies for numpy and other packages
+RUN apt-get update && apt-get install -y gcc g++ build-essential && rm -rf /var/lib/apt/lists/*
 
-# --- Stage 2: Final image with backend + frontend ---
-FROM python:3.11-slim
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install a simple web server tool for static files
-RUN pip install --no-cache-dir flask
+# Copy application code
+COPY src/ ./src/
 
-WORKDIR /app
+# Expose application port
+EXPOSE 5000
 
-# Copy backend from build stage
-COPY --from=backend /app /app
-
-# Copy frontend (assuming in 'website' folder at repo root)
-COPY website/ /app/static/
-
-# Expose port (change if different)
-EXPOSE 8000
-
-# Command: run main.py
-CMD ["python", "main.py"]
+# Run the simulator (adjust if you use a different main file)
+CMD ["python", "src/main.py"]

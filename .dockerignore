@@ -1,0 +1,19 @@
+# Ignore everything that's not needed in the image
+.git
+.gitmodules
+.vscode
+docs
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.DS_Store
+**/.micropico
+**/venv
+**/.venv
+**/*.mp4
+**/*.avi
+**/*.mov
+**/*.jpg
+**/*.jpeg
+**/*.png
+**/*.zip
