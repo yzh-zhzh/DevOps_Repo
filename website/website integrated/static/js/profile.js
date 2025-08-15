@@ -18,7 +18,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
   const user = auth.currentUser;
   if (!user) {
     alert("No logged in user, please login first.");
-    window.location.href = "/";  // Redirect to login page
+    window.location.href = "/index";  // Redirect to login page
     return;
   }
 
@@ -30,7 +30,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
       emergencyContact
     });
     alert("Profile updated! Please log in again.");
-    window.location.href = "/";  // Redirect to login page after update
+    window.location.href = "/profile";  // Redirect to login page after update
   } catch (error) {
     alert("Failed to update profile: " + error.message);
   }
