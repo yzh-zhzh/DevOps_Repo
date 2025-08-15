@@ -1,13 +1,7 @@
 from flask import Flask, jsonify, render_template, Response, redirect
 import temp_humidity_sensor_data as temp_humidity
 import time
-<<<<<<< HEAD:website/website integrated/app.py
 
-=======
-from threading import Thread
-from camera import generate_frames
-from src import Fire_detection as detection
->>>>>>> 44e9ad2b884f36e821619640342c11c571aad642:website/website_integrated/app.py
 
 app = Flask(__name__)
 
@@ -95,14 +89,6 @@ def login_html_redirect():
 def profile_html_redirect():
     return redirect('/profile')
 
-@app.route('/camera')
-def camera_page():
-    return render_template('camera.html')
-
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    
 
 if __name__ == '__main__':
   
