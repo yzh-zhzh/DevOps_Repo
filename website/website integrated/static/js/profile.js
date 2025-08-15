@@ -1,37 +1,37 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import firebaseConfig from './firebaseConfig.js';
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-document.querySelector("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById("name").value;
-  const age = document.getElementById("age").value;
-  const emergencyContact = document.getElementById("emergencyContact").value;
-
-  const user = auth.currentUser;
+// Load profile data when user is logged in
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("No logged in user, please login first.");
-    window.location.href = "/";  // Redirect to login page
+    window.location.href = "/";
     return;
   }
 
   try {
     const userDocRef = doc(db, "users", user.uid);
-    await updateDoc(userDocRef, {
-      name,
-      age,
-      emergencyContact
-    });
-    alert("Profile updated! Please log in again.");
-    window.location.href = "/";  // Redirect to login page after update
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      document.getElementById("resident-name").textContent = data.name || "N/A";
+      document.getElementById("room-number").textContent = data.roomNumber || "N/A";
+      document.getElementById("age").textContent = data.age || "N/A";
+      document.getElementById("emergency-contact").textContent = data.emergencyContact || "N/A";
+    } else {
+      alert("User profile not found in database!");
+    }
   } catch (error) {
-    alert("Failed to update profile: " + error.message);
+    console.error("Error fetching profile:", error);
+    alert("Failed to fetch profile: " + error.message);
   }
 });
