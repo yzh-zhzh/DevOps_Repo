@@ -12,7 +12,7 @@ from hal import hal_moisture_sensor as moisture_sensor
 from hal import hal_servo as servo
 from hal import hal_temp_humidity_sensor as temp_humid_sensor
 from hal import hal_dc_motor as dc_motor
-
+from hal import hal_rfid_reader
 from lcd_display_controller import lcd_display_thread
 
 from temp_sensor import fire_detection_thread
@@ -23,7 +23,6 @@ from sprinkler_confirmation import moisture_sensor_sprinkler_confirmation_thread
 from play_fire_tone import play_fire_alert_tone
 from ultrasonic_data import ultrasonic_data_thread
 from Camera import camera_thread
-
 
 shared_keypad_queue = queue.Queue()
 
