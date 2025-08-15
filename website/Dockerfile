@@ -1,3 +1,4 @@
+
 # Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
@@ -12,10 +13,9 @@ RUN apt-get update && \
     python3-rpi.gpio \
     libffi-dev \
     libssl-dev \
-    libatlas-base-dev \
+    build-essential \
+    gcc \
     libjpeg-dev \
-    libtiff5 \
-    libjasper-dev \
     libpng-dev \
     libavcodec-dev \
     libavformat-dev \
@@ -25,14 +25,13 @@ RUN apt-get update && \
     libx264-dev \
     libfontconfig1 \
     libdbus-1-3 \
-    libglib2.0-0 \
+    libglib2.0-0t64 \
     libsm6 \
     libxext6 \
     libxrender1 \
     && rm -rf /var/lib/apt/lists/*
 
-
-# Copy requirements.txt and install Python dependencies
+# Install Python dependencies if requirements.txt exists
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 

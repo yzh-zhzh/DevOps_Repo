@@ -17,30 +17,13 @@ docker build -f docker/Dockerfile -t <hub-user>/<repo>:sim --target simulator .
 docker buildx create --use --name multi || true
 docker buildx build --platform linux/arm64 -f docker/Dockerfile -t <hub-user>/<repo>:rpi --target rpi .
 ```
-
-## Run
-
-```bash
-docker run --rm -p 5000:5000 <hub-user>/<repo>:sim
-# open http://localhost:5000
-```
-
-For the `rpi` image, you may need device access and privileges to use camera/sensors on a Raspberry Pi:
-```bash
-docker run --rm -p 5000:5000 \
-  --device /dev/video0 \
-  --privileged \
-  <hub-user>/<repo>:rpi
-```
-
-## Push to Docker Hub
-
-```bash
-docker login
-docker tag <hub-user>/<repo>:sim <hub-user>/<repo>:latest
-docker push <hub-user>/<repo>:sim
-docker push <hub-user>/<repo>:rpi
-docker push <hub-user>/<repo>:latest
-```
-
 > Replace `<hub-user>` and `<repo>` with your Docker Hub username and repository name.
+
+## Using Docker Compose
+
+To build and run both services together:
+```bash
+docker-compose up --build
+```
+- The `website` service will be available on [http://localhost:5001](http://localhost:5001)
+- If running on real Raspberry Pi hardware, uncomment the device mappings in `docker-compose.yml

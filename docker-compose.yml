@@ -1,13 +1,12 @@
-# Docker Compose file for hardware (src) and website services
 version: '3.8'
 services:
   hardware:
     build:
-      context: .
       dockerfile: src/Dockerfile
+      context: .
     container_name: hardware
     restart: unless-stopped
-    # Add device mapping if running on real Raspberry Pi hardware
+    # Uncomment the following lines if running on real Raspberry Pi hardware
     # devices:
     #   - "/dev/gpiomem:/dev/gpiomem"
     #   - "/dev/vchiq:/dev/vchiq"
@@ -17,18 +16,10 @@ services:
     #   - ENV_VAR=value
 
   website:
-    build:
-      context: ./website
-      dockerfile: Dockerfile
+    build: ./website
     container_name: website
-    restart: unless-stopped
     ports:
-      - "5000:5000"
-    # Add device mapping if running on real Raspberry Pi hardware
-    # devices:
-    #   - "/dev/gpiomem:/dev/gpiomem"
-    #   - "/dev/vchiq:/dev/vchiq"
-    #   - "/dev/video0:/dev/video0"
-    # privileged: true
+      - "5001:5000"
+    restart: unless-stopped
     # environment:
     #   - ENV_VAR=value
