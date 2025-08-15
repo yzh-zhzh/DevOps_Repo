@@ -1,10 +1,7 @@
 from flask import Flask, jsonify, render_template, Response, redirect
 import temp_humidity_sensor_data as temp_humidity
 import time
-from threading import Thread
-# Uncomment these when camera and detection modules are ready
-# from camera import generate_frames
-# from src import Fire_detection as detection
+from src import Fire_detection as detection
 
 app = Flask(__name__)
 
@@ -66,8 +63,7 @@ def sensor_history_data():
 def data():
     try:
         temperature, humidity = temp_humidity.read_data()
-        # smoke = detection.smoke_detected()  # Uncomment when detection module ready
-        smoke = False
+        smoke = detection.smoke_detected()  # Uncomment when detection module ready
         return jsonify({
             "temperature": round(temperature, 2),
             "humidity": round(humidity, 2),
@@ -94,15 +90,6 @@ def login_html_redirect():
 def profile_html_redirect():
     return redirect('/profile')
 
-@app.route('/camera')
-def camera_page():
-    return render_template('camera.html')
-
-@app.route('/video_feed')
-def video_feed():
-    # Uncomment when camera module is ready
-    # return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    return "Camera feed not implemented yet"
 
 if __name__ == '__main__':
     collector_thread = Thread(target=sensor_data_collector, daemon=True)

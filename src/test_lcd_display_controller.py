@@ -39,6 +39,7 @@ def test_override_success_message(mock_lcd):
 
 
 def test_fire_detected_with_password(mock_lcd):
+    lcd_ctrl.override_success = False
     lcd_ctrl.fire_detected = True
     lcd_ctrl.awaiting_password = True
     lcd_ctrl.entered_passcode = "12"
@@ -50,6 +51,7 @@ def test_fire_detected_with_password(mock_lcd):
 
 
 def test_fire_detected_with_wrong_password(mock_lcd):
+    lcd_ctrl.override_success = False
     lcd_ctrl.fire_detected = True
     lcd_ctrl.awaiting_password = True
     lcd_ctrl.entered_passcode = "99"

@@ -1,6 +1,7 @@
 import pytest
 import time
 from unittest import mock
+import sys
 
 @pytest.fixture
 def mock_moisture_sensor():
@@ -15,7 +16,7 @@ def mock_update_sprinkler_status():
 
 @pytest.fixture(autouse=True)
 def patch_hal(monkeypatch, mock_moisture_sensor, mock_update_sprinkler_status):
-	monkeypatch.setattr('hal.hal_moisture_sensor', mock_moisture_sensor)
+	monkeypatch.setitem(sys.modules, 'hal.hal_moisture_sensor', mock_moisture_sensor)
 	monkeypatch.setattr('lcd_display_controller.update_sprinkler_status', mock_update_sprinkler_status)
 
 def import_sprinkler_confirmation():
