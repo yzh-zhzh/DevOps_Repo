@@ -1,3 +1,4 @@
+from threading import Thread
 from flask import Flask, jsonify, render_template, Response, redirect
 import temp_humidity_sensor_data as temp_humidity
 import time
@@ -22,7 +23,7 @@ def sensor_data_collector():
                 sensor_history.pop(0)
         except Exception as e:
             print(f"Sensor read error: {e}")
-        time.sleep(10)
+        time.sleep(3)
 
 @app.after_request
 def add_cors_headers(response):
@@ -65,8 +66,7 @@ def data():
         temperature, humidity = temp_humidity.read_data()
         return jsonify({
             "temperature": round(temperature, 2),
-            "humidity": round(humidity, 2)
-            
+            "humidity": round(humidity, 2) 
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -91,5 +91,6 @@ def profile_html_redirect():
 
 
 if __name__ == '__main__':
-  
-    app.run(host='0.0.0.0', port=5000)
+    collector_thread = Thread(target=sensor_data_collector, daemon=True)
+    collector_thread.start()
+    app.run(host='0.0.0.0', port=5000, debug=True)
