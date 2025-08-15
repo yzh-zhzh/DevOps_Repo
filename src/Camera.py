@@ -1,45 +1,31 @@
-from picamera2 import Picamera2
-from picamera2.encoders import H264Encoder
-import time
-from datetime import datetime
-import os
+from flask import Flask, render_template, Response
+from picamera2 import Picamera2, JpegEncoder
+import io
 
-SAVE_PATH = "/home/pi/fire_videos"
+app = Flask(__name__, template_folder='templates')
 
-def camera_thread(system_state):
-    if not os.path.exists(SAVE_PATH):
-        os.makedirs(SAVE_PATH)
+# Initialize camera
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
+picam2.start()
 
-    picam2 = Picamera2()
-    video_config = picam2.create_video_configuration(
-        main={"size": (1920, 1080)}, 
-        lores={"size": (640, 480)}, 
-        display="lores"
-    )
-    picam2.configure(video_config)
-    encoder = H264Encoder(bitrate=10000000)
+def generate_frames():
+    stream = io.BytesIO()
+    while True:
+        stream.seek(0)
+        picam2.capture_file(stream, format='jpeg')
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + stream.getvalue() + b'\r\n')
 
-    # Start the camera once (no preview)
-    picam2.start()
-    recording = False
+@app.route('/camera')
+def camera_page():
+    return render_template('camera.html')
 
-    try:
-        while True:
-            if system_state['fire_detected'] and not system_state.get('motor_locked', False):
-                if not recording:
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    output_file = os.path.join(SAVE_PATH, f"fire_{timestamp}.h264")
-                    print("[Camera] Fire detected! Starting recording...")
-                    picam2.start_recording(encoder, output_file)
-                    recording = True
-            else:
-                if recording:
-                    print("[Camera] Stopping recording...")
-                    picam2.stop_recording()
-                    recording = False
-            time.sleep(0.5)
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
-    except KeyboardInterrupt:
-        pass
-    finally:
-        picam2.stop()
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001, debug=False)
+

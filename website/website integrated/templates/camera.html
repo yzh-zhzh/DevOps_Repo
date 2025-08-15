@@ -13,7 +13,7 @@
         <li><a href="/camera"  class="active">CCTV CAMERA</a></li>
         <li><a href="/sensor_log_history">SENSOR HISTORY LOG</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
-        <li><a href="/profile" >PROFILE</a></li>
+        <li><a href="/profile">PROFILE</a></li>
       </ul>
    </nav>
   </header>
@@ -22,8 +22,7 @@
     <h1>Live CCTV Camera</h1>
     <p class="subtitle">Streaming from Raspberry Pi camera</p>
     <div style="display: flex; justify-content: center;">
-      <!-- Replace below with your actual stream or video file URL -->
-      <img src="video_feed_url_or_placeholder.jpg" style="max-width: 100%; border: 5px solid #333; border-radius: 12px;" alt="Live CCTV Feed" />
+      <img src="{{ url_for('video_feed') }}" style="max-width: 100%; border: 5px solid #333; border-radius: 12px;" alt="Live CCTV Feed" />
     </div>
   </main>
 </body>
