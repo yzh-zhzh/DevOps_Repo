@@ -21,8 +21,8 @@ RUN apt-get update && \
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the src directory contents into the container at /app
-COPY src/ ./
+# Copy all files from the build context (src/) into the container at /app
+COPY . ./
 
 # Run main.py when the container launches
 CMD ["python", "main.py"]
