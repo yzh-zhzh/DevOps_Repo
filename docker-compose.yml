@@ -2,8 +2,8 @@ version: '3.8'
 services:
   hardware:
     build:
-      dockerfile: src/Dockerfile
-      context: .
+      context: ./src
+      dockerfile: Dockerfile
     container_name: hardware
     restart: unless-stopped
     # Uncomment the following lines if running on real Raspberry Pi hardware
