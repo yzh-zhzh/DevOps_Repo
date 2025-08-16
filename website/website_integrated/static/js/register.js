@@ -28,7 +28,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     });
 
     // Redirect to complete-profile page after successful registration
-    window.location.href = "/complete-profile";
+    window.location.href = "/";
   } catch (error) {
     alert("Registration failed: " + error.message);
   }

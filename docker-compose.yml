@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  hardware:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    container_name: hardware
+    restart: unless-stopped
+    # Enable the following lines for hardware access on Raspberry Pi
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/vchiq:/dev/vchiq"
+      - "/dev/video0:/dev/video0"
+      - "/dev/i2c-1:/dev/i2c-1"
+    privileged: true
+    # environment:
+    #   - ENV_VAR=value
+
+  website:
+    image: yzhzh09/smart-fire-alert-website:latest
+    container_name: website
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    # environment:
+    #   - ENV_VAR=value

@@ -2,9 +2,11 @@ override_success = False
 entered_passcode = ''
 passcode_error = False
 
+
 import time
 from threading import Lock
 from hal import hal_lcd as LCD
+import os
 
 
 sprinkler_status_message = "Water OK"
@@ -15,7 +17,14 @@ fire_detected = False
 lcd_lock = Lock()
 
 
-lcd = LCD.lcd()
+lcd = None
+try:
+    if os.path.exists('/dev/i2c-1'):
+        lcd = LCD.lcd()
+    else:
+        print("/dev/i2c-1 not found. LCD will not be initialized.")
+except Exception as e:
+    print(f"LCD initialization failed: {e}")
 
 def update_sprinkler_status(message):
     global sprinkler_status_message
@@ -42,6 +51,9 @@ def lcd_display_thread():
     alternate = 0
     while True:
         with lcd_lock:
+            if lcd is None:
+                time.sleep(1)
+                continue
             line1 = "Smart Fire Alert"
             line2 = "System Ready!"
 
@@ -95,8 +107,10 @@ def lcd_display_thread():
 
 def update_lcd_line1(message):
     with lcd_lock:
-        lcd.lcd_display_string(message.ljust(16), 1)
+        if lcd is not None:
+            lcd.lcd_display_string(message.ljust(16), 1)
 
 def update_lcd_line2(message):
     with lcd_lock:
-        lcd.lcd_display_string(message.ljust(16), 2)
+        if lcd is not None:
+            lcd.lcd_display_string(message.ljust(16), 2)

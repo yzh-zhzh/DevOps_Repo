@@ -24,7 +24,6 @@ from play_fire_tone import play_fire_alert_tone
 from ultrasonic_data import ultrasonic_data_thread
 from Camera import camera_thread
 
-
 shared_keypad_queue = queue.Queue()
 
 system_state = {
