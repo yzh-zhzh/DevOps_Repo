@@ -17,7 +17,7 @@ services:
     #   - ENV_VAR=value
 
   website:
-    build: ./website
+    image: yzhzh09/smart-fire-alert-website:latest
     container_name: website
     ports:
       - "5000:5000"
