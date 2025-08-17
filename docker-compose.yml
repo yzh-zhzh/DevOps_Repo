@@ -7,11 +7,27 @@ services:
     container_name: hardware
     restart: unless-stopped
     devices:
-      - "/dev/gpiomem:/dev/gpiomem"
-      - "/dev/vchiq:/dev/vchiq"
-      - "/dev/video0:/dev/video0"
+      - "/dev:/dev"
       - "/dev/i2c-1:/dev/i2c-1"
+      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/mem:/dev/mem"
+      - "/dev/video0:/dev/video0"
+      - "/dev/vchiq:/dev/vchiq"
+    volumes:
+      - /sys:/sys:ro
+      - /proc:/proc:ro
+      - /lib/modules:/lib/modules:ro
+    environment:
+      - DISPLAY=${DISPLAY}
+      - LIBCAMERA_LOG_LEVEL=3
+      - SPI_PATH=/app/SPI-Py
+      - RFID_SPI_DEVICE=/dev/spidev0.0
+
     privileged: true
+    network_mode: host
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
 
   website:
     image: yzhzh09/smart-fire-alert-website:latest
