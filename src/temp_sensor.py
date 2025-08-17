@@ -25,4 +25,8 @@ def fire_detection_thread(system_state):
                 if not buzzer_thread_started:
                     Thread(target=play_fire_alert_tone, args=(system_state,), daemon=True).start()
                     buzzer_thread_started = True
+        else:
+            if system_state['fire_detected']:
+                system_state['fire_detected'] = False
+                set_fire_detected(False)
         time.sleep(2)
