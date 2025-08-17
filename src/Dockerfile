@@ -34,10 +34,9 @@ RUN apt-get update && \
     libx265-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies (except picamera2, which is installed via apt)
+# Install Python dependencies
 COPY requirements.txt ./
-RUN grep -v '^picamera2' requirements.txt > requirements_nocam.txt && \
-    pip3 install --no-cache-dir -r requirements_nocam.txt && rm requirements_nocam.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 
 # Copy all files from the build context (src/) into the container at /app
