@@ -37,6 +37,10 @@ def video_feed():
     return Response(generate_frames(),
                     mimetype="multipart/x-mixed-replace; boundary=frame")
 
+def camera_thread(system_state):
+    print("[Camera] CCTV server starting on http://0.0.0.0:5001/camera")
+    app.run(host="0.0.0.0", port=5001, debug=False, threaded=True, use_reloader=False)
+
 if __name__ == "__main__":
     print("[Camera] CCTV server starting on http://0.0.0.0:5001/camera")
     app.run(host="0.0.0.0", port=5001, debug=False, threaded=True)

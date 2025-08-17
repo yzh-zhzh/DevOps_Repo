@@ -13,8 +13,8 @@ services:
       - "/dev/video0:/dev/video0"
       - "/dev/i2c-1:/dev/i2c-1"
     privileged: true
-    # environment:
-    #   - ENV_VAR=value
+    environment:
+      - SPI_PATH=/app/SPI-Py
 
   website:
     image: yzhzh09/smart-fire-alert-website:latest
