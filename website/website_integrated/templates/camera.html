@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CCTV Camera | Fire Alarm System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+</head>
+<body>
+  <header>
+   <nav>
+      <ul class="nav">
+        <li><a href="/camera" class="active">CCTV CAMERA</a></li>
+        <li><a href="/sensor_log_history">SENSOR HISTORY LOG</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/profile">PROFILE</a></li>
+      </ul>
+   </nav>
+  </header>
+
+  <main class="content">
+    <h1>Live CCTV Camera</h1>
+    <p class="subtitle">Streaming from Raspberry Pi camera</p>
+    <div style="display: flex; justify-content: center;">
+      <img src="{{ url_for('video_feed') }}" 
+           style="max-width: 100%; border: 5px solid #333; border-radius: 12px;" 
+           alt="Live CCTV Feed" />
+    </div>
+  </main>
+</body>
+</html>
+

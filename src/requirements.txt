@@ -3,3 +3,4 @@ RPi.GPIO
 spidev
 smbus2
 picamera2
+flask
