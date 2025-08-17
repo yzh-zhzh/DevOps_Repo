@@ -1,13 +1,16 @@
-import pytest
-from unittest import mock
 import sys
+from unittest import mock
+
+sys.modules['RPi'] = mock.Mock()
+sys.modules['RPi.GPIO'] = mock.Mock()
+import pytest
 
 @pytest.fixture(autouse=True)
 def patch_hal_temp_humidity():
 	mock_hal = mock.Mock()
 	mock_hal.init = mock.Mock()
 	mock_hal.read_temp_humidity = mock.Mock(return_value=(25.5, 60.2))
-	sys.modules['src.hal.hal_temp_humidity_sensor'] = mock_hal
+	sys.modules['hal.hal_temp_humidity_sensor'] = mock_hal
 
 def import_temp_humidity_sensor_data():
 	import importlib
