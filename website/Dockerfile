@@ -41,5 +41,7 @@ COPY website_integrated/ ./
 # Expose port 5000 for Flask
 EXPOSE 5000
 
+USER root
+
 # Run app.py when the container launches
 CMD ["python", "app.py"]

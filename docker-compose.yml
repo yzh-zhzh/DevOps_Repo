@@ -1,9 +1,7 @@
 version: '3.8'
 services:
   hardware:
-    build:
-      context: ./src
-      dockerfile: Dockerfile
+    image: yzhzh09/smart-fire-alert-hardware:latest2
     container_name: hardware
     restart: unless-stopped
     devices:
@@ -24,7 +22,7 @@ services:
     privileged: true
 
   website:
-    image: yzhzh09/smart-fire-alert-website:latest2
+    image: yzhzh09/smart-fire-alert-website:latest
     container_name: website
     ports:
       - "5000:5000"
