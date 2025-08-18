@@ -12,7 +12,7 @@ from hal import hal_moisture_sensor as moisture_sensor
 from hal import hal_servo as servo
 from hal import hal_temp_humidity_sensor as temp_humid_sensor
 from hal import hal_dc_motor as dc_motor
-#from hal import hal_rfid_reader
+from hal import hal_rfid_reader
 from lcd_display_controller import lcd_display_thread
 from slide_switch import wait_for_switch_on
 from hal import hal_input_switch
@@ -24,7 +24,7 @@ from water_adjustment import water_adjustment_thread
 from sprinkler_confirmation import moisture_sensor_sprinkler_confirmation_thread
 from play_fire_tone import play_fire_alert_tone
 from ultrasonic_data import ultrasonic_data_thread
-#from Camera import run_camera_server
+from Camera import run_camera_server
 
 shared_keypad_queue = queue.Queue()
 
@@ -64,13 +64,20 @@ def start_all_threads():
     Thread(target=lcd_display_thread, daemon=True).start()
     Thread(target=notify_fire_alert, args=(system_state,), daemon=True).start()
     Thread(target=ultrasonic_data_thread, args=(system_state,), daemon=True).start()
-    #Thread(target=run_camera_server, daemon=True).start()
+    Thread(target=run_camera_server, daemon=True).start()
 
 def main():
 
     # Initialize slide switch hardware
-    hal_input_switch.init()
-    wait_for_switch_on()
+    '''hal_input_switch.init()
+    wait_for_switch_on()'''
+
+    print("Waiting for RFID card to activate system...")
+    while True:
+        if RFID.RFID_reader():
+            print("RFID detected! Activating all systems.")
+            break
+        time.sleep(1)
 
     initialize_hardware()
     start_all_threads()
