@@ -45,4 +45,10 @@
 - Triggered fire alert when temperature > 40°C
 - Provided real-time temperature data for fire detection logic
 
+#### Docker
+- Configured Dockerfile for both main.py (hardware) & app.py (software) & YAML file for docker-compose
+- Pushed Docker Image to Docker Hub
+- Hardware: https://hub.docker.com/repository/docker/yzhzh09/smart-fire-alert-hardware
+- Website: https://hub.docker.com/repository/docker/yzhzh09/smart-fire-alert-website
+
 ---
