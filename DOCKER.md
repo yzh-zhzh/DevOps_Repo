@@ -2,22 +2,22 @@
 
 This repo contains two Docker build targets:
 
-- `simulator` (default): portable image without Raspberry Pi hardware. It exposes `/data` and `/video_feed` endpoints for demo/testing.
-- `rpi` (experimental): arm64 build intended for Raspberry Pi OS with camera/sensors and HAL available.
+- `hardware` (src/main.py): for hardware system functions; initialise all hardware components.
+- `website` (website/app.py): hosts a website that provides a web-interface for users.
 
 ## Build
 
-### Simulator (runs anywhere)
+### Hardware
 ```bash
-docker build -f docker/Dockerfile -t <hub-user>/<repo>:sim --target simulator .
+docker pull yzhzh09/smart-fire-alert-hardware:latest2
+docker run --privileged yzhzh09/smart-fire-alert-hardware:latest2
 ```
 
-### Raspberry Pi (arm64)
+### Website
 ```bash
-docker buildx create --use --name multi || true
-docker buildx build --platform linux/arm64 -f docker/Dockerfile -t <hub-user>/<repo>:rpi --target rpi .
+docker pull yzhzh09/smart-fire-alert-website:latest
+docker run --privileged -p 5000:5000 yzhzh09/smart-fire-alert-website:latest
 ```
-> Replace `<hub-user>` and `<repo>` with your Docker Hub username and repository name.
 
 ## Using Docker Compose
 
@@ -25,5 +25,4 @@ To build and run both services together:
 ```bash
 docker-compose up --build
 ```
-- The `website` service will be available on [http://localhost:5001](http://localhost:5001)
-- If running on real Raspberry Pi hardware, uncomment the device mappings in `docker-compose.yml
+- The `website` service will be available on the Raspberry Pi IP Address
