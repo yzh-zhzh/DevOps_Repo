@@ -1,7 +1,13 @@
+import sys
+from unittest import mock
+
+sys.modules['requests'] = mock.Mock()
+
 import pytest
 import builtins
 import notify_alert
 from unittest import mock
+# ...rest of your code...
 
 @pytest.fixture
 def config_dict():
